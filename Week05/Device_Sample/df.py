@@ -1,7 +1,7 @@
 import csmapi
 
-csmapi.ENDPOINT = "https://1.iottalk.tw"
-device_id = "RCtest"
+csmapi.ENDPOINT = "https://3.iottalk.tw"
+device_id = "CTF_Control"
 
 try:    
     profile = csmapi.pull(device_id, 'profile')
@@ -20,3 +20,5 @@ try:
 except Exception as e:    
     print('Error: {}'.format(e))
 
+# Output
+# {'Butt': 3, 'Colo': 2, 'Keyp': 1, 'Knob': 0, 'Swit': 3, 'Togg': 0, 'Slid': 0}

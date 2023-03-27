@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{device_id}}</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    
+    <script src="{{ url_for('static', filename = 'csmapi_modified.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'Switch.js') }}"></script>
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'bootstrap/css/bootstrap-theme.min.css') }}" >
+    <script src="{{ url_for('static', filename = 'bootstrap/js/bootstrap.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'bootstrap/css/bootstrap-toggle.min.css') }}">
+    <script src="{{ url_for('static', filename = 'bootstrap/js/bootstrap-toggle.min.js') }}"></script>    
+
+
+   </head>
+
+    <script>
+        set_device_id('{{ device_id }}');
+        load_alias('{{ device_id }}', 'Switch', {{df_dict['Swit']}});
+        load_state('Switch', {{df_dict['Swit']}}, update_switch_state);
+    </script>   
+
+  <body>
+    <TD style="FONT-SIZE: 24px; COLOR:#000000; LINE-HIGHT:50px; FONT-FAMILY:Arial,Helvetica,sans-serif">
+    <legend>
+        <span class="text-success" style="white-space:nowrap;">{{device_id}}</span>
+        <button type="button" class="btn btn-danger close" aria-label="Close" onclick="dereg('{{device_id}}')"> <span aria-hidden="true">&times;</span> </button>
+    </legend>
+
+
+    
+
+    {% if df_dict['Swit'] != 0 %} 
+        {% if sync %}
+        <script>
+            console.log('Switch sync mode: ON.');
+            setInterval(load_state, 3000, 'Switch', {{df_dict['Swit']}}, update_switch_state);
+        </script>
+        {% endif %}
+
+    <!-- <legend class="text-primary h2">Switch</legend> -->
+        {% for i in range(df_dict['Swit']) %}
+        <div class="checkbox" style=" white-space:nowrap;">
+            <label>
+	        <input  type="checkbox" data-toggle="toggle" id="Switch{{i+1}}">
+	        <span class = "text-primary Switch{{i+1}} h2"  style=" white-space:nowrap;"> Switch{{i+1}} </span>
+            </label>
+        </div>
+        {% endfor %}
+    <br>
+    {% endif %}
+
+  </body>
+</html>

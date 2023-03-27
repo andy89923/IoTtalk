@@ -1,6 +1,6 @@
 import requests
 
-ENDPOINT = 'https://3.iottalk.tw' 
+ENDPOINT = 'https://3.iottalk.tw'
 TIMEOUT=10
 IoTtalk = requests.Session()
 passwordKey = None
@@ -28,6 +28,7 @@ def deregister(mac_addr, UsingSession=IoTtalk):
 
 
 def push(mac_addr, df_name, data, UsingSession=IoTtalk):
+    print("Push from py")
     r = UsingSession.put(
         ENDPOINT + '/' + mac_addr + '/' + df_name,
         json={'data': data},
