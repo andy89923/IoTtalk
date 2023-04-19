@@ -13,9 +13,9 @@ mac_addr = 'CD8600D38' + str(3456)
 
 
 Reg_addr = mac_addr   # Note that the mac_addr generated in DAN.py always be the same cause using UUID !
-DAN.profile['dm_name'] = 'Dummy_Device'   # you can change this but should also add the DM in server
-DAN.profile['df_list'] = ['Dummy_Sensor', 'Dummy_Control']   # Check IoTtalk to see what IDF/ODF the DM has
-DAN.profile['d_name']  = "CTF." + str(random.randint(100,999 )) + "_" + DAN.profile['dm_name'] # None
+DAN.profile['dm_name'] = 'CTF_WS'                       
+DAN.profile['df_list'] = ['.HUMD', '.H_24R', '.PRES', '.TEMP']
+DAN.profile['d_name']  = DAN.profile['dm_name']
 DAN.device_registration_with_retry(ServerURL, Reg_addr) 
 
 print("dm_name is ", DAN.profile['dm_name']) ; print("Server is ", ServerURL);
@@ -42,29 +42,36 @@ def doRead( ):
         if theInput =='quit' or theInput == "exit":    # these are NOT data
            allDead = True
         else:
-           print("Will send ", theInput, end = "   , ")
            gotInput = True
+        sleep(10)
         if allDead: break;
-        sleep(5)
-        if allDead: break;
+
 
 #creat a thread to do Input data from keyboard, by tsaiwn@cs.nctu.edu.tw 
 threadx = threading.Thread(target = doRead)
 threadx.daemon = True  # 這樣才不會阻礙到主程式的結束
 threadx.start()
 
+
 while True:
     try:
         if(allDead): break;
-        value1 = DAN.pull('Dummy_Control')
-        if value1 != None:    # 不等於 None 表示有抓到資料
-            print (value1[0])
+        # value1 = DAN.pull('.Output')
+        # if value1 != None:    # 不等於 None 表示有抓到資料
+        #     print (value1[0])
         # Push data to a device feature called "Dummy_Sensor" 
         if gotInput:  # 小弟有讀到資料了 
            # we have data in theInput
            if(allDead): break;
            gotInput = False    
-           DAN.push('Dummy_Sensor', f'{theInput}', f'{theInput}')
+           DAN.push('.TEMP', f'TEMP {theInput[0]}', f'TEMP {theInput[0]}')
+           sleep(0.5)
+           DAN.push('.HUMD', f'HUMD {theInput[1]}', f'HUMD {theInput[1]}')
+           sleep(0.5)
+           DAN.push('.PRES', f'PRES {theInput[2]}', f'PRES {theInput[2]}')
+           sleep(0.5)
+           DAN.push('.H_24R', f'H_24R {theInput[3]}', f'H_24R {theInput[3]}')
+
 
     except Exception as e:
         print(e)
